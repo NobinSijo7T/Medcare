@@ -1,0 +1,235 @@
+/* ========================================
+   Modern Product Card
+   Clean, premium design used for both Categories and Products
+   ======================================== */
+
+.product-card {
+  width: 100%;
+  max-width: 400px;
+  background: #ffffff;
+  border-radius: 24px;
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  display: flex;
+  flex-direction: column;
+  margin: 1.5rem auto;
+  position: relative;
+  isolation: isolate;
+  border: 1px solid rgba(0, 0, 0, 0.02);
+}
+
+.product-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.12);
+}
+
+/* ---- Image Area ---- */
+.product-card__image-container {
+  width: 100%;
+  height: 220px;
+  overflow: hidden;
+  position: relative;
+  background-color: #f8f9fa;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+}
+
+.product-card__image-container a {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  align-items: center;
+  justify-content: center;
+}
+
+.product-card__image-container img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  transition: transform 0.6s ease;
+}
+
+.product-card:hover .product-card__image-container img {
+  transform: scale(1.1);
+}
+
+/* ---- Content Area ---- */
+.product-card__content {
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  flex-grow: 1;
+  gap: 1rem;
+}
+
+/* ---- Typography ---- */
+.product-card__title {
+  font-family: 'Inter', sans-serif;
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #1a1a1a;
+  margin: 0;
+  letter-spacing: -0.5px;
+  line-height: 1.3;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-height: 2.6em;
+  /* Ensure uniform height for titles */
+}
+
+/* ---- Meta Info (Price & Category) ---- */
+.product-card__meta {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  width: 100%;
+  margin-bottom: 0.5rem;
+}
+
+.product-card__category {
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  color: #888;
+  letter-spacing: 1px;
+  font-weight: 600;
+  background: #f4f4f4;
+  padding: 4px 10px;
+  border-radius: 99px;
+}
+
+.product-card__price {
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: #171717;
+}
+
+/* ---- Description (if used) ---- */
+.product-card__description {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.9rem;
+  color: #666;
+  line-height: 1.5;
+  margin: 0 0 1rem 0;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* ---- Actions Container ---- */
+.product-card__actions {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  width: 100%;
+  margin-top: auto;
+}
+
+/* ---- Buttons ---- */
+.product-card__button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 0.95rem;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  border: none;
+  font-family: 'Inter', sans-serif;
+}
+
+/* Primary Button (View Details) - Expands */
+.product-card__button--primary {
+  flex-grow: 1;
+  padding: 0.8rem 1.5rem;
+  background: #171717;
+  color: #ffffff;
+  border-radius: 50px;
+  white-space: nowrap;
+}
+
+.product-card__button--primary:hover {
+  background: #000000;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+  color: #ffffff;
+  text-decoration: none;
+}
+
+/* Secondary Button (Add to Cart) - Icon Button */
+.product-card__button--secondary {
+  flex-shrink: 0;
+  width: 48px;
+  height: 48px;
+  background: #f4f4f4;
+  color: #171717;
+  border-radius: 50%;
+  font-size: 1.1rem;
+}
+
+.product-card__button--secondary:hover {
+  background: #171717;
+  color: #ffffff;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+}
+
+.product-card__button--secondary:active {
+  transform: translateY(0);
+}
+
+/* ---- Responsive ---- */
+@media (max-width: 1200px) {
+  .product-card {
+    width: 280px;
+  }
+}
+
+@media (max-width: 992px) {
+  .product-card {
+    width: 45%;
+    max-width: 320px;
+    margin: 1rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .product-card {
+    width: 100%;
+    max-width: 340px;
+    margin: 1rem auto;
+  }
+
+  .product-card__image-container {
+    height: 240px;
+  }
+}
+
+@media (max-width: 480px) {
+  .product-card {
+    border-radius: 16px;
+  }
+
+  .product-card__content {
+    padding: 1.25rem;
+  }
+
+  .product-card__title {
+    font-size: 1.15rem;
+    min-height: auto;
+  }
+
+  .product-card__actions {
+    gap: 0.5rem;
+  }
+}

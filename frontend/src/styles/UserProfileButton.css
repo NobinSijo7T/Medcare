@@ -1,0 +1,184 @@
+.user-profile-container {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 9999;
+}
+
+.user-circle-button,
+.login-circle-button {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #4a4a4a 0%, #2c2c2c 100%);
+    border: 3px solid #f0f0f0;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #f0f0f0;
+    font-size: 24px;
+    transition: all 0.3s ease;
+    text-decoration: none;
+}
+
+.user-circle-button:hover,
+.login-circle-button:hover {
+    transform: scale(1.1);
+    box-shadow: 0 6px 20px rgba(74, 74, 74, 0.4);
+}
+
+.user-circle-button.active {
+    transform: scale(1.05);
+    box-shadow: 0 6px 20px rgba(74, 74, 74, 0.5);
+}
+
+.user-profile-dropdown {
+    position: absolute;
+    top: 60px;
+    right: 0;
+    width: 280px;
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+    overflow: hidden;
+    animation: dropdownSlideIn 0.2s ease;
+}
+
+@keyframes dropdownSlideIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.dropdown-header {
+    padding: 20px;
+    background: linear-gradient(135deg, #4a4a4a 0%, #2c2c2c 100%);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.user-avatar {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 28px;
+}
+
+.user-info h4 {
+    margin: 0 0 4px 0;
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.user-info p {
+    margin: 0;
+    font-size: 13px;
+    opacity: 0.9;
+}
+
+.dropdown-divider {
+    height: 1px;
+    background: #e0e0e0;
+    margin: 8px 0;
+}
+
+.dropdown-link {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 20px;
+    color: #333;
+    text-decoration: none;
+    transition: all 0.2s ease;
+    cursor: pointer;
+    border: none;
+    background: none;
+    width: 100%;
+    text-align: left;
+    font-size: 14px;
+    font-family: inherit;
+}
+
+.dropdown-link:hover {
+    background: #f5f5f5;
+    color: #4a4a4a;
+}
+
+.dropdown-link i {
+    width: 20px;
+    text-align: center;
+    font-size: 16px;
+}
+
+.logout-link {
+    color: #dc3545;
+}
+
+.logout-link:hover {
+    background: #fff5f5;
+    color: #dc3545;
+}
+
+/* Mobile responsive */
+@media (max-width: 768px) {
+    .user-profile-container {
+        top: 15px;
+        right: 15px;
+    }
+
+    .user-circle-button,
+    .login-circle-button {
+        width: 45px;
+        height: 45px;
+        font-size: 20px;
+    }
+
+    .user-profile-dropdown {
+        width: 260px;
+        right: -10px;
+    }
+
+    .dropdown-header {
+        padding: 16px;
+    }
+
+    .user-avatar {
+        width: 45px;
+        height: 45px;
+        font-size: 24px;
+    }
+
+    .user-info h4 {
+        font-size: 14px;
+    }
+
+    .user-info p {
+        font-size: 12px;
+    }
+
+    .dropdown-link {
+        padding: 10px 16px;
+        font-size: 13px;
+    }
+}
+
+/* Ensure it's above everything */
+@media (min-width: 769px) {
+    .user-profile-container {
+        top: 25px;
+        right: 30px;
+    }
+}

@@ -1,0 +1,259 @@
+/* Import Gotham-like font (Montserrat is a close alternative) */
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap');
+
+/* Bouncy Cards Features Section */
+.bouncy-section-wrapper {
+    width: 100%;
+    background-color: #ffffff;
+    padding: 48px 0;
+}
+
+.bouncy-section {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 16px;
+    color: #1e293b;
+}
+
+.bouncy-header {
+    margin-bottom: 48px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    padding: 0 32px;
+    text-align: center;
+}
+
+.bouncy-title {
+    max-width: 800px;
+    font-size: 2.5rem;
+    font-weight: 700;
+    line-height: 1.2;
+    margin: 0;
+    color: #1e293b;
+    font-family: 'Montserrat', sans-serif;
+}
+
+@media (min-width: 768px) {
+    .bouncy-title {
+        font-size: 3.5rem;
+    }
+}
+
+.bouncy-title-accent {
+    background: linear-gradient(135deg, #1e293b 0%, #64748b 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.bouncy-subtitle {
+    font-size: 1.125rem;
+    color: #64748b;
+    margin: 0;
+    max-width: 600px;
+    line-height: 1.6;
+}
+
+@media (min-width: 768px) {
+    .bouncy-subtitle {
+        font-size: 1.25rem;
+    }
+}
+
+.bouncy-button {
+    white-space: nowrap;
+    border-radius: 8px;
+    background-color: #0f172a;
+    padding: 8px 16px;
+    font-weight: 500;
+    color: white;
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    transition: all 0.3s ease;
+    border: none;
+    cursor: pointer;
+}
+
+.bouncy-button:hover {
+    background-color: #334155;
+    transform: scale(1.05);
+}
+
+.bouncy-button:active {
+    transform: scale(0.95);
+}
+
+/* Grid Layouts */
+.bouncy-grid-top,
+.bouncy-grid-bottom {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    gap: 16px;
+    margin-bottom: 16px;
+}
+
+.bouncy-grid-bottom {
+    margin-bottom: 0;
+}
+
+/* Card Styles */
+.bouncy-card {
+    position: relative;
+    min-height: 300px;
+    cursor: pointer;
+    overflow: hidden;
+    border-radius: 16px;
+    background-color: #f1f5f9;
+    padding: 32px;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.bouncy-card:hover {
+    transform: scale(0.95) rotate(-1deg);
+}
+
+.bouncy-card-small {
+    grid-column: span 12;
+}
+
+.bouncy-card-large {
+    grid-column: span 12;
+}
+
+@media (min-width: 768px) {
+    .bouncy-card-small {
+        grid-column: span 4;
+    }
+
+    .bouncy-card-large {
+        grid-column: span 8;
+    }
+}
+
+/* Card Icon Styles */
+.card-icon-wrapper {
+    width: 60px;
+    height: 60px;
+    margin: 0 auto 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #1e293b 0%, #475569 100%);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.bouncy-card:hover .card-icon-wrapper {
+    transform: scale(1.1) rotate(5deg);
+    box-shadow: 0 8px 20px rgba(30, 41, 59, 0.4);
+}
+
+.card-icon {
+    width: 32px;
+    height: 32px;
+    color: white;
+    stroke-width: 2.5;
+}
+
+.bouncy-card-title {
+    margin: 0 auto 8px;
+    text-align: center;
+    font-size: 1.875rem;
+    font-weight: 600;
+    color: #1e293b;
+    font-family: 'Montserrat', sans-serif;
+}
+
+.bouncy-card-content {
+    position: absolute;
+    bottom: 0;
+    left: 16px;
+    right: 16px;
+    top: 128px;
+    transform: translateY(32px);
+    border-radius: 16px 16px 0 0;
+    padding: 16px;
+    transition: transform 250ms cubic-bezier(0.4, 0, 0.2, 1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.bouncy-card:hover .bouncy-card-content {
+    transform: translateY(16px) rotate(2deg);
+}
+
+.bouncy-card-text {
+    display: block;
+    text-align: center;
+    font-weight: 600;
+    font-size: 1rem;
+    line-height: 1.5;
+}
+
+/* Gradient Backgrounds */
+.bouncy-violet {
+    background: linear-gradient(to bottom right, #a78bfa, #6366f1);
+}
+
+.bouncy-violet .bouncy-card-text {
+    color: #eef2ff;
+}
+
+.bouncy-orange {
+    background: linear-gradient(to bottom right, #fbbf24, #f97316);
+}
+
+.bouncy-orange .bouncy-card-text {
+    color: #fff7ed;
+}
+
+.bouncy-green {
+    background: linear-gradient(to bottom right, #4ade80, #10b981);
+}
+
+.bouncy-green .bouncy-card-text {
+    color: #ecfdf5;
+}
+
+.bouncy-pink {
+    background: linear-gradient(to bottom right, #f472b6, #ef4444);
+}
+
+.bouncy-pink .bouncy-card-text {
+    color: #fef2f2;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .bouncy-section-wrapper {
+        padding: 32px 0;
+    }
+
+    .bouncy-section {
+        padding: 0 16px;
+    }
+
+    .bouncy-header {
+        padding: 0 16px;
+    }
+
+    .bouncy-title {
+        font-size: 2rem;
+    }
+
+    .bouncy-card {
+        min-height: 250px;
+        padding: 24px;
+    }
+
+    .bouncy-card-title {
+        font-size: 1.5rem;
+    }
+
+    .bouncy-card-content {
+        top: 100px;
+    }
+}
