@@ -18,10 +18,10 @@ const ReminderNotification = () => {
       // Check for reminders every time the component mounts
       dispatch(getActiveReminders());
       
-      // Also check every 5 minutes
+      // Also check every 30 seconds for immediate notification
       const interval = setInterval(() => {
         dispatch(getActiveReminders());
-      }, 5 * 60 * 1000); // 5 minutes
+      }, 30 * 1000); // 30 seconds
 
       return () => clearInterval(interval);
     }

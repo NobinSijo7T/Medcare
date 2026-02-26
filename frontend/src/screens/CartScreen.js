@@ -138,10 +138,188 @@ const CartScreen = () => {
   };
 
   return (
-    <div className="cartscreen">
-      <div className="cartscreen__left">
-        <h2>Your Cart</h2>
-        <p className="cart-subtitle">Review and manage your selected items</p>
+    <>
+      {/* Checkout Modal */}
+      {showCheckoutForm && (
+        <div className="checkout-modal-overlay" onClick={() => setShowCheckoutForm(false)}>
+          <div className="checkout-modal" onClick={(e) => e.stopPropagation()}>
+            <button className="checkout-modal-close" onClick={() => setShowCheckoutForm(false)}>
+              <i className="fas fa-times"></i>
+            </button>
+            
+            <div className="checkout-modal-header">
+              <div className="checkout-modal-icon">
+                <i className="fas fa-shopping-bag"></i>
+              </div>
+              <h2>Complete Your Order</h2>
+              <p>Just a few details and you're all set!</p>
+            </div>
+
+            <div className="checkout-modal-body">
+              {orderError && (
+                <div className="checkout-error">
+                  <i className="fas fa-exclamation-circle"></i> {orderError}
+                </div>
+              )}
+
+              <form onSubmit={handlePlaceOrder} className="checkout-form">
+                <div className="checkout-section">
+                  <h3 className="section-title">
+                    <i className="fas fa-shipping-fast"></i> Shipping Information
+                  </h3>
+                  
+                  <div className="form-group">
+                    <label htmlFor="address">
+                      <i className="fas fa-map-marker-alt"></i> Street Address
+                    </label>
+                    <input
+                      type="text"
+                      id="address"
+                      placeholder="Enter your street address"
+                      value={address}
+                      onChange={(e) => setAddress(e.target.value)}
+                      required
+                    />
+                  </div>
+
+                  <div className="form-row">
+                    <div className="form-group">
+                      <label htmlFor="city">
+                        <i className="fas fa-city"></i> City
+                      </label>
+                      <input
+                        type="text"
+                        id="city"
+                        placeholder="City"
+                        value={city}
+                        onChange={(e) => setCity(e.target.value)}
+                        required
+                      />
+                    </div>
+
+                    <div className="form-group">
+                      <label htmlFor="postalCode">
+                        <i className="fas fa-mail-bulk"></i> Postal Code
+                      </label>
+                      <input
+                        type="text"
+                        id="postalCode"
+                        placeholder="Postal Code"
+                        value={postalCode}
+                        onChange={(e) => setPostalCode(e.target.value)}
+                        required
+                      />
+                    </div>
+                  </div>
+
+                  <div className="form-group">
+                    <label htmlFor="country">
+                      <i className="fas fa-globe"></i> Country
+                    </label>
+                    <input
+                      type="text"
+                      id="country"
+                      placeholder="Country"
+                      value={country}
+                      onChange={(e) => setCountry(e.target.value)}
+                      required
+                    />
+                  </div>
+                </div>
+
+                <div className="checkout-section">
+                  <h3 className="section-title">
+                    <i className="fas fa-credit-card"></i> Payment Method
+                  </h3>
+                  
+                  <div className="payment-options">
+                    <label className={`payment-option ${paymentMethod === 'Cash on Delivery' ? 'selected' : ''}`}>
+                      <input
+                        type="radio"
+                        name="paymentMethod"
+                        value="Cash on Delivery"
+                        checked={paymentMethod === 'Cash on Delivery'}
+                        onChange={(e) => setPaymentMethod(e.target.value)}
+                      />
+                      <div className="payment-content">
+                        <i className="fas fa-money-bill-wave"></i>
+                        <span>Cash on Delivery</span>
+                      </div>
+                    </label>
+
+                    <label className={`payment-option ${paymentMethod === 'UPI' ? 'selected' : ''}`}>
+                      <input
+                        type="radio"
+                        name="paymentMethod"
+                        value="UPI"
+                        checked={paymentMethod === 'UPI'}
+                        onChange={(e) => setPaymentMethod(e.target.value)}
+                      />
+                      <div className="payment-content">
+                        <i className="fas fa-mobile-alt"></i>
+                        <span>UPI</span>
+                      </div>
+                    </label>
+
+                    <label className={`payment-option ${paymentMethod === 'Card on Delivery' ? 'selected' : ''}`}>
+                      <input
+                        type="radio"
+                        name="paymentMethod"
+                        value="Card on Delivery"
+                        checked={paymentMethod === 'Card on Delivery'}
+                        onChange={(e) => setPaymentMethod(e.target.value)}
+                      />
+                      <div className="payment-content">
+                        <i className="fas fa-credit-card"></i>
+                        <span>Card on Delivery</span>
+                      </div>
+                    </label>
+                  </div>
+                </div>
+
+                <div className="checkout-modal-footer">
+                  <div className="order-total-display">
+                    <span>Order Total</span>
+                    <span className="total-amount">
+                      ₹{(Number(getCartSubTotal()) + (Number(getCartSubTotal()) > 100 ? 0 : 10) + (0.18 * Number(getCartSubTotal()))).toFixed(2)}
+                    </span>
+                  </div>
+                  
+                  <div className="checkout-actions">
+                    <button
+                      type="button"
+                      className="checkout-back-btn"
+                      onClick={() => setShowCheckoutForm(false)}
+                    >
+                      <i className="fas fa-arrow-left"></i> Cancel
+                    </button>
+                    <button
+                      type="submit"
+                      className="checkout-submit-btn"
+                      disabled={orderLoading}
+                    >
+                      {orderLoading ? (
+                        <>
+                          <i className="fas fa-spinner fa-spin"></i> Processing...
+                        </>
+                      ) : (
+                        <>
+                          <i className="fas fa-check-circle"></i> Place Order
+                        </>
+                      )}
+                    </button>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      )}
+
+      <div className="cartscreen">
+        <div className="cartscreen__left">
+          <h2>Your Cart</h2>
+          <p className="cart-subtitle">Review and manage your selected items</p>
 
         {cartItems.length === 0 ? (
           <div className="cart-empty">
@@ -207,142 +385,28 @@ const CartScreen = () => {
             </div>
           </div>
 
-          {!showCheckoutForm ? (
-            <div className="cart-checkout-wrap">
-              <button 
-                className="cart-checkout-btn"
-                onClick={() => {
-                  if (!userInfo) {
-                    history.push("/login?redirect=cart");
-                  } else {
-                    setShowCheckoutForm(true);
-                  }
-                }}
-              >
-                Proceed to Checkout <span>→</span>
-              </button>
-              <div className="cart-secure-note">
-                {Number(getCartSubTotal()) > 100 && "🎉 You qualify for FREE shipping!"}
-                {Number(getCartSubTotal()) <= 100 && "💡 Add ₹" + (100 - Number(getCartSubTotal())).toFixed(2) + " more for FREE shipping"}
-              </div>
+          <div className="cart-checkout-wrap">
+            <button 
+              className="cart-checkout-btn"
+              onClick={() => {
+                if (!userInfo) {
+                  history.push("/login?redirect=cart");
+                } else {
+                  setShowCheckoutForm(true);
+                }
+              }}
+            >
+              Proceed to Checkout <span>→</span>
+            </button>
+            <div className="cart-secure-note">
+              {Number(getCartSubTotal()) > 100 && "🎉 You qualify for FREE shipping!"}
+              {Number(getCartSubTotal()) <= 100 && "💡 Add ₹" + (100 - Number(getCartSubTotal())).toFixed(2) + " more for FREE shipping"}
             </div>
-          ) : (
-            <div className="checkout-form-container">
-              <h3 className="checkout-form-title">
-                <i className="fas fa-shipping-fast"></i> Shipping Details
-              </h3>
-              
-              {orderError && (
-                <div className="checkout-error">
-                  <i className="fas fa-exclamation-circle"></i> {orderError}
-                </div>
-              )}
-
-              <form onSubmit={handlePlaceOrder} className="checkout-form">
-                <div className="form-group">
-                  <label htmlFor="address">
-                    <i className="fas fa-map-marker-alt"></i> Street Address
-                  </label>
-                  <input
-                    type="text"
-                    id="address"
-                    placeholder="Enter your street address"
-                    value={address}
-                    onChange={(e) => setAddress(e.target.value)}
-                    required
-                  />
-                </div>
-
-                <div className="form-row">
-                  <div className="form-group">
-                    <label htmlFor="city">
-                      <i className="fas fa-city"></i> City
-                    </label>
-                    <input
-                      type="text"
-                      id="city"
-                      placeholder="City"
-                      value={city}
-                      onChange={(e) => setCity(e.target.value)}
-                      required
-                    />
-                  </div>
-
-                  <div className="form-group">
-                    <label htmlFor="postalCode">
-                      <i className="fas fa-mail-bulk"></i> Postal Code
-                    </label>
-                    <input
-                      type="text"
-                      id="postalCode"
-                      placeholder="Postal Code"
-                      value={postalCode}
-                      onChange={(e) => setPostalCode(e.target.value)}
-                      required
-                    />
-                  </div>
-                </div>
-
-                <div className="form-group">
-                  <label htmlFor="country">
-                    <i className="fas fa-globe"></i> Country
-                  </label>
-                  <input
-                    type="text"
-                    id="country"
-                    placeholder="Country"
-                    value={country}
-                    onChange={(e) => setCountry(e.target.value)}
-                    required
-                  />
-                </div>
-
-                <div className="form-group">
-                  <label htmlFor="paymentMethod">
-                    <i className="fas fa-money-bill-wave"></i> Payment Method
-                  </label>
-                  <select
-                    id="paymentMethod"
-                    value={paymentMethod}
-                    onChange={(e) => setPaymentMethod(e.target.value)}
-                    required
-                  >
-                    <option value="Cash on Delivery">Cash on Delivery</option>
-                    <option value="UPI">UPI</option>
-                    <option value="Card on Delivery">Card on Delivery</option>
-                  </select>
-                </div>
-
-                <div className="checkout-actions">
-                  <button
-                    type="button"
-                    className="checkout-back-btn"
-                    onClick={() => setShowCheckoutForm(false)}
-                  >
-                    <i className="fas fa-arrow-left"></i> Back
-                  </button>
-                  <button
-                    type="submit"
-                    className="checkout-submit-btn"
-                    disabled={orderLoading}
-                  >
-                    {orderLoading ? (
-                      <>
-                        <i className="fas fa-spinner fa-spin"></i> Processing...
-                      </>
-                    ) : (
-                      <>
-                        <i className="fas fa-check-circle"></i> Place Order
-                      </>
-                    )}
-                  </button>
-                </div>
-              </form>
-            </div>
-          )}
+          </div>
         </div>
       )}
-    </div>
+      </div>
+    </>
   );
 };
 
