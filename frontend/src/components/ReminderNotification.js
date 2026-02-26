@@ -15,10 +15,10 @@ const ReminderNotification = () => {
 
   useEffect(() => {
     if (userInfo) {
-      // Check for reminders every time the component mounts
+      // Initial check immediately
       dispatch(getActiveReminders());
       
-      // Also check every 30 seconds for immediate notification
+      // Poll every 30 seconds for new reminders
       const interval = setInterval(() => {
         dispatch(getActiveReminders());
       }, 30 * 1000); // 30 seconds
@@ -27,8 +27,20 @@ const ReminderNotification = () => {
     }
   }, [dispatch, userInfo]);
 
+  // Clear dismissed reminders when new data arrives to prevent stale state
+  useEffect(() => {
+    if (reminders && reminders.length > 0) {
+      // Remove dismissed IDs that are no longer in the current reminders list
+      setDismissedReminders(prev => 
+        prev.filter(id => reminders.some(r => r._id === id))
+      );
+    }
+  }, [reminders]);
+
   const handleDismiss = (orderId) => {
+    // Add to local dismissed list for immediate UI update
     setDismissedReminders([...dismissedReminders, orderId]);
+    // Mark as shown in database
     dispatch(markReminderShown(orderId));
   };
 

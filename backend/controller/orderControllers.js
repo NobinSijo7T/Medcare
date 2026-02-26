@@ -173,12 +173,14 @@ const setOrderReminder = async (req, res) => {
 // @access  Private
 const getActiveReminders = async (req, res) => {
   try {
+    const now = new Date();
     const today = new Date();
     today.setHours(0, 0, 0, 0);
     
     const tomorrow = new Date(today);
     tomorrow.setDate(tomorrow.getDate() + 1);
 
+    // Get all potential reminders for today
     const orders = await Order.find({
       user: req.user._id,
       "reminder.isSet": true,
@@ -186,7 +188,19 @@ const getActiveReminders = async (req, res) => {
       "reminder.notificationShown": false,
     }).sort({ "reminder.reminderDate": 1 });
 
-    res.json(orders);
+    // Filter by time - only show if current time >= reminder time
+    const activeOrders = orders.filter(order => {
+      if (!order.reminder.reminderTime) return true; // Show if no time set
+      
+      const [hours, minutes] = order.reminder.reminderTime.split(':').map(Number);
+      const reminderDateTime = new Date(order.reminder.reminderDate);
+      reminderDateTime.setHours(hours, minutes, 0, 0);
+      
+      // Show reminder if current time has passed the reminder time
+      return now >= reminderDateTime;
+    });
+
+    res.json(activeOrders);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
