@@ -1,14 +1,14 @@
 import "../styles/CartScreen.css";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { Link } from "react-router-dom";
-import StripeCheckout from "react-stripe-checkout";
+import { Link, useHistory } from "react-router-dom";
 
 // Components
 import CartItem from "../components/CartItem";
 
 // Actions
 import { addToCart, removeFromCart } from "../redux/actions/cartActions";
+import { createOrder } from "../redux/actions/orderActions";
 
 // Hook for dark theme (copied from prescription screen logic)
 const useDarkPage = () => {
@@ -51,10 +51,34 @@ const useDarkPage = () => {
 
 const CartScreen = () => {
   const dispatch = useDispatch();
+  const history = useHistory();
   useDarkPage();
 
   const cart = useSelector((state) => state.cart);
   const { cartItems } = cart;
+
+  const userLogin = useSelector((state) => state.userLogin);
+  const { userInfo } = userLogin;
+
+  const orderCreate = useSelector((state) => state.orderCreate);
+  const { loading: orderLoading, success: orderSuccess, error: orderError } = orderCreate;
+
+  // Checkout form state
+  const [showCheckoutForm, setShowCheckoutForm] = useState(false);
+  const [address, setAddress] = useState("");
+  const [city, setCity] = useState("");
+  const [postalCode, setPostalCode] = useState("");
+  const [country, setCountry] = useState("");
+  const [paymentMethod, setPaymentMethod] = useState("Cash on Delivery");
+
+  useEffect(() => {
+    if (orderSuccess) {
+      // Clear cart after successful order
+      cartItems.forEach(item => dispatch(removeFromCart(item.product)));
+      // Redirect to profile page to see orders
+      history.push("/profile");
+    }
+  }, [orderSuccess, history, cartItems, dispatch]);
 
   const qtyChangeHandler = (id, qty) => {
     dispatch(addToCart(id, qty));
@@ -74,26 +98,44 @@ const CartScreen = () => {
       .toFixed(2);
   };
 
-  const makePayment = token => {
-    const body = {
-      token,
-      product: cartItems,
-      price: getCartSubTotal()
-    }
-    const headers = {
-      "content-type": "application/json"
+  const handlePlaceOrder = (e) => {
+    e.preventDefault();
+    
+    if (!userInfo) {
+      history.push("/login?redirect=cart");
+      return;
     }
 
-    return fetch(`http://localhost:5000/payment`, {
-      method: "POST",
-      headers: headers,
-      body: JSON.stringify(body)
-    }).then(response => {
-      cartItems.forEach(item => dispatch(removeFromCart(item.product)))
-    }).catch(error => {
-      console.log("ERROR", error)
-    })
-  }
+    // Calculate prices
+    const itemsPrice = Number(getCartSubTotal());
+    const shippingPrice = itemsPrice > 100 ? 0 : 10; // Free shipping over ₹100
+    const taxPrice = Number((0.18 * itemsPrice).toFixed(2)); // 18% GST
+    const totalPrice = (itemsPrice + shippingPrice + taxPrice).toFixed(2);
+
+    // Create order object
+    const order = {
+      orderItems: cartItems.map(item => ({
+        name: item.title, // Cart uses 'title' not 'name'
+        qty: item.qty,
+        imageUrl: item.imgsrc, // Cart uses 'imgsrc' not 'imageUrl'
+        price: item.price,
+        product: item.product,
+      })),
+      shippingAddress: {
+        address,
+        city,
+        postalCode,
+        country,
+      },
+      paymentMethod,
+      itemsPrice,
+      taxPrice,
+      shippingPrice,
+      totalPrice,
+    };
+
+    dispatch(createOrder(order));
+  };
 
   return (
     <div className="cartscreen">
@@ -141,42 +183,163 @@ const CartScreen = () => {
             </div>
 
             <div className="cart-summary-row">
-              <span className="label">Subtotal (INR)</span>
+              <span className="label">Subtotal</span>
               <span className="value">₹{getCartSubTotal()}</span>
             </div>
 
             <div className="cart-summary-row">
-              <span className="label">USD Approx.</span>
-              <span className="value">${(getCartSubTotal() * 0.014).toFixed(2)}</span>
+              <span className="label">Shipping</span>
+              <span className="value">₹{Number(getCartSubTotal()) > 100 ? 0 : 10}</span>
+            </div>
+
+            <div className="cart-summary-row">
+              <span className="label">Tax (18% GST)</span>
+              <span className="value">₹{(0.18 * Number(getCartSubTotal())).toFixed(2)}</span>
             </div>
 
             <div className="cart-summary-divider"></div>
 
             <div className="cart-summary-total">
               <span className="label">Total</span>
-              <span className="value">₹{getCartSubTotal()}</span>
+              <span className="value">
+                ₹{(Number(getCartSubTotal()) + (Number(getCartSubTotal()) > 100 ? 0 : 10) + (0.18 * Number(getCartSubTotal()))).toFixed(2)}
+              </span>
             </div>
           </div>
 
-          <div className="cart-checkout-wrap">
-            <StripeCheckout
-              stripeKey="pk_test_51IPsBgEwEbzzqba9A4AQsmpCvFKjJbN9AyCrLYwCykIR1XTe8mFHcRQB6qWHz1Y6D8XZSK0gHi2CIr92nDzrs07f00W0hXIIRv"
-              token={makePayment}
-              amount={getCartSubTotal() * 100}
-              name="Pharmacy Checkout"
-              currency="INR"
-              shippingAddress
-              billingAddress
-            >
-              <button className="cart-checkout-btn">
+          {!showCheckoutForm ? (
+            <div className="cart-checkout-wrap">
+              <button 
+                className="cart-checkout-btn"
+                onClick={() => {
+                  if (!userInfo) {
+                    history.push("/login?redirect=cart");
+                  } else {
+                    setShowCheckoutForm(true);
+                  }
+                }}
+              >
                 Proceed to Checkout <span>→</span>
               </button>
-            </StripeCheckout>
-
-            <div className="cart-secure-note">
-              🔒 Powered by Stripe for secure payments
+              <div className="cart-secure-note">
+                {Number(getCartSubTotal()) > 100 && "🎉 You qualify for FREE shipping!"}
+                {Number(getCartSubTotal()) <= 100 && "💡 Add ₹" + (100 - Number(getCartSubTotal())).toFixed(2) + " more for FREE shipping"}
+              </div>
             </div>
-          </div>
+          ) : (
+            <div className="checkout-form-container">
+              <h3 className="checkout-form-title">
+                <i className="fas fa-shipping-fast"></i> Shipping Details
+              </h3>
+              
+              {orderError && (
+                <div className="checkout-error">
+                  <i className="fas fa-exclamation-circle"></i> {orderError}
+                </div>
+              )}
+
+              <form onSubmit={handlePlaceOrder} className="checkout-form">
+                <div className="form-group">
+                  <label htmlFor="address">
+                    <i className="fas fa-map-marker-alt"></i> Street Address
+                  </label>
+                  <input
+                    type="text"
+                    id="address"
+                    placeholder="Enter your street address"
+                    value={address}
+                    onChange={(e) => setAddress(e.target.value)}
+                    required
+                  />
+                </div>
+
+                <div className="form-row">
+                  <div className="form-group">
+                    <label htmlFor="city">
+                      <i className="fas fa-city"></i> City
+                    </label>
+                    <input
+                      type="text"
+                      id="city"
+                      placeholder="City"
+                      value={city}
+                      onChange={(e) => setCity(e.target.value)}
+                      required
+                    />
+                  </div>
+
+                  <div className="form-group">
+                    <label htmlFor="postalCode">
+                      <i className="fas fa-mail-bulk"></i> Postal Code
+                    </label>
+                    <input
+                      type="text"
+                      id="postalCode"
+                      placeholder="Postal Code"
+                      value={postalCode}
+                      onChange={(e) => setPostalCode(e.target.value)}
+                      required
+                    />
+                  </div>
+                </div>
+
+                <div className="form-group">
+                  <label htmlFor="country">
+                    <i className="fas fa-globe"></i> Country
+                  </label>
+                  <input
+                    type="text"
+                    id="country"
+                    placeholder="Country"
+                    value={country}
+                    onChange={(e) => setCountry(e.target.value)}
+                    required
+                  />
+                </div>
+
+                <div className="form-group">
+                  <label htmlFor="paymentMethod">
+                    <i className="fas fa-money-bill-wave"></i> Payment Method
+                  </label>
+                  <select
+                    id="paymentMethod"
+                    value={paymentMethod}
+                    onChange={(e) => setPaymentMethod(e.target.value)}
+                    required
+                  >
+                    <option value="Cash on Delivery">Cash on Delivery</option>
+                    <option value="UPI">UPI</option>
+                    <option value="Card on Delivery">Card on Delivery</option>
+                  </select>
+                </div>
+
+                <div className="checkout-actions">
+                  <button
+                    type="button"
+                    className="checkout-back-btn"
+                    onClick={() => setShowCheckoutForm(false)}
+                  >
+                    <i className="fas fa-arrow-left"></i> Back
+                  </button>
+                  <button
+                    type="submit"
+                    className="checkout-submit-btn"
+                    disabled={orderLoading}
+                  >
+                    {orderLoading ? (
+                      <>
+                        <i className="fas fa-spinner fa-spin"></i> Processing...
+                      </>
+                    ) : (
+                      <>
+                        <i className="fas fa-check-circle"></i> Place Order
+                      </>
+                    )}
+                  </button>
+                </div>
+              </form>
+            </div>
+          )}
         </div>
       )}
     </div>

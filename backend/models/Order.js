@@ -74,6 +74,27 @@ const orderSchema = mongoose.Schema(
     deliveredAt: {
       type: Date,
     },
+    reminder: {
+      isSet: {
+        type: Boolean,
+        default: false,
+      },
+      reminderDate: {
+        type: Date,
+      },
+      reminderTime: {
+        type: String,
+        default: "09:00", // Default reminder time 9:00 AM
+      },
+      reminderMessage: {
+        type: String,
+        default: "Time to reorder your medication",
+      },
+      notificationShown: {
+        type: Boolean,
+        default: false,
+      },
+    },
   },
   {
     timestamps: true,

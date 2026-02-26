@@ -22,6 +22,11 @@ import {
   orderCreateReducer,
   orderDetailsReducer,
   orderListMyReducer,
+  orderListAllReducer,
+  orderStatusUpdateReducer,
+  orderReminderSetReducer,
+  orderRemindersActiveReducer,
+  orderReminderMarkShownReducer,
 } from "./reducers/orderReducers";
 
 const reducer = combineReducers({
@@ -39,6 +44,11 @@ const reducer = combineReducers({
   orderCreate: orderCreateReducer,
   orderDetails: orderDetailsReducer,
   orderListMy: orderListMyReducer,
+  orderListAll: orderListAllReducer,
+  orderStatusUpdate: orderStatusUpdateReducer,
+  orderReminderSet: orderReminderSetReducer,
+  orderRemindersActive: orderRemindersActiveReducer,
+  orderReminderMarkShown: orderReminderMarkShownReducer,
 });
 
 const middleware = [thunk];

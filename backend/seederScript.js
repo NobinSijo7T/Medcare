@@ -1,9 +1,11 @@
 require("dotenv").config();
 
 const productData = require("./data/products");
+const sampleOrders = require("./data/orders");
 const connectDB = require("./config/db");
 const Product = require("./models/Product");
 const User = require("./models/User");
+const Order = require("./models/Order");
 
 connectDB();
 
@@ -24,8 +26,32 @@ const adminUsers = [
 
 const regularUsers = [
   {
-    name: "Test User",
-    email: "user@pharmacy.com",
+    name: "Arjun Sharma",
+    email: "arjun@example.com",
+    password: "user123",
+    isAdmin: false,
+  },
+  {
+    name: "Priya Patel",
+    email: "priya@example.com",
+    password: "user123",
+    isAdmin: false,
+  },
+  {
+    name: "Rahul Mehta",
+    email: "rahul@example.com",
+    password: "user123",
+    isAdmin: false,
+  },
+  {
+    name: "Neha Gupta",
+    email: "neha@example.com",
+    password: "user123",
+    isAdmin: false,
+  },
+  {
+    name: "Vikram Singh",
+    email: "vikram@example.com",
     password: "user123",
     isAdmin: false,
   },
@@ -33,25 +59,60 @@ const regularUsers = [
 
 const importData = async () => {
   try {
+    // ── 1. Clear existing data ────────────────────────────────────────
+    await Order.deleteMany({});
     await Product.deleteMany({});
     await User.deleteMany({});
-    
-    await Product.insertMany(productData);
-    await User.insertMany([...adminUsers, ...regularUsers]);
-    
-    console.log("Data Import Success");
-    console.log("\n=== Admin Accounts ===");
-    adminUsers.forEach(admin => {
-      console.log(`Email: ${admin.email} | Password: ${admin.password}`);
-    });
-    console.log("\n=== User Accounts ===");
-    regularUsers.forEach(user => {
-      console.log(`Email: ${user.email} | Password: ${user.password}`);
-    });
+    console.log("✓ Cleared existing data");
 
-    process.exit();
+    // ── 2. Insert products ────────────────────────────────────────────
+    const insertedProducts = await Product.insertMany(productData);
+    console.log(`✓ Inserted ${insertedProducts.length} products`);
+
+    // ── 3. Create users one-by-one (triggers bcrypt hashing) ─────────
+    const allUserData = [...adminUsers, ...regularUsers];
+    const insertedUsers = [];
+    for (const userData of allUserData) {
+      const user = new User(userData);
+      await user.save();
+      insertedUsers.push(user);
+    }
+    console.log(`✓ Inserted ${insertedUsers.length} users`);
+
+    // ── 4. Seed sample orders ─────────────────────────────────────────
+    const ordersToInsert = sampleOrders(insertedUsers, insertedProducts);
+    const insertedOrders = await Order.insertMany(ordersToInsert);
+    console.log(`✓ Inserted ${insertedOrders.length} sample orders`);
+
+    // ── 5. Summary ────────────────────────────────────────────────────
+    console.log("\n================================================");
+    console.log("           DATA IMPORT SUCCESSFUL! ✅");
+    console.log("================================================");
+
+    console.log("\n🔑  Admin Accounts (isAdmin = true):");
+    console.log("┌─────────────────────────────┬──────────────────┐");
+    adminUsers.forEach((a) =>
+      console.log(`│ ${a.email.padEnd(27)} │ ${a.password.padEnd(16)} │`)
+    );
+    console.log("└─────────────────────────────┴──────────────────┘");
+
+    console.log("\n👤  Regular User Accounts:");
+    console.log("┌─────────────────────────────┬──────────────────┐");
+    regularUsers.forEach((u) =>
+      console.log(`│ ${u.email.padEnd(27)} │ ${u.password.padEnd(16)} │`)
+    );
+    console.log("└─────────────────────────────┴──────────────────┘");
+
+    console.log(
+      `\n📦  ${insertedOrders.length} sample orders spread across the last 30 days.`
+    );
+    console.log(
+      "   Log in as an admin account to view them in the Admin Panel → Orders tab.\n"
+    );
+
+    process.exit(0);
   } catch (error) {
-    console.error("Error with data import", error);
+    console.error("\n❌  Error during data import:", error);
     process.exit(1);
   }
 };

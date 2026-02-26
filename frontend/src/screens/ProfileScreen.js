@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useHistory } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { getUserDetails, updateUserProfile } from "../redux/actions/userActions";
-import { listMyOrders } from "../redux/actions/orderActions";
+import { listMyOrders, setOrderReminder } from "../redux/actions/orderActions";
 import "../styles/ProfileScreen.css";
 
 const ProfileScreen = () => {
@@ -12,6 +12,13 @@ const ProfileScreen = () => {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [message, setMessage] = useState(null);
   const [editMode, setEditMode] = useState(false);
+  
+  // Reminder state
+  const [showReminderModal, setShowReminderModal] = useState(false);
+  const [selectedOrder, setSelectedOrder] = useState(null);
+  const [reminderDate, setReminderDate] = useState("");
+  const [reminderTime, setReminderTime] = useState("09:00");
+  const [reminderMessage, setReminderMessage] = useState("Time to reorder your medication");
 
   const dispatch = useDispatch();
   const history = useHistory();
@@ -70,6 +77,46 @@ const ProfileScreen = () => {
       default:
         return "#9e9e9e";
     }
+  };
+
+  const handleSetReminder = (order) => {
+    setSelectedOrder(order);
+    
+    // Set default reminder date if one exists, otherwise suggest 7 days from now
+    if (order.reminder && order.reminder.isSet) {
+      const existingDate = new Date(order.reminder.reminderDate);
+      setReminderDate(existingDate.toISOString().split('T')[0]);
+      setReminderTime(order.reminder.reminderTime || "09:00");
+      setReminderMessage(order.reminder.reminderMessage || "Time to reorder your medication");
+    } else {
+      const defaultDate = new Date();
+      defaultDate.setDate(defaultDate.getDate() + 7);
+      setReminderDate(defaultDate.toISOString().split('T')[0]);
+      setReminderTime("09:00");
+      setReminderMessage("Time to reorder your medication");
+    }
+    
+    setShowReminderModal(true);
+  };
+
+  const handleSaveReminder = (e) => {
+    e.preventDefault();
+    if (selectedOrder && reminderDate && reminderTime) {
+      dispatch(setOrderReminder(selectedOrder._id, reminderDate, reminderTime, reminderMessage));
+      setShowReminderModal(false);
+      setMessage("Reminder set successfully!");
+      setTimeout(() => setMessage(null), 3000);
+      // Refresh orders to show updated reminder
+      dispatch(listMyOrders());
+    }
+  };
+
+  const handleCloseReminderModal = () => {
+    setShowReminderModal(false);
+    setSelectedOrder(null);
+    setReminderDate("");
+    setReminderTime("09:00");
+    setReminderMessage("Time to reorder your medication");
   };
 
   return (
@@ -183,12 +230,29 @@ const ProfileScreen = () => {
                                 0
                               )}
                           </div>
-                          <button
-                            className="view-details-btn"
-                            onClick={() => history.push(`/order/${order._id}`)}
-                          >
-                            View Details
-                          </button>
+                          <div className="order-actions">
+                            <button
+                              className="set-reminder-btn"
+                              onClick={() => handleSetReminder(order)}
+                              title={order.reminder?.isSet ? "Update Reminder" : "Set Reminder"}
+                            >
+                              <i className="fas fa-bell"></i>
+                              {order.reminder?.isSet ? (
+                                <>
+                                  <span className="reminder-indicator">●</span>
+                                  Reminder Set
+                                </>
+                              ) : (
+                                "Set Reminder"
+                              )}
+                            </button>
+                            <button
+                              className="view-details-btn"
+                              onClick={() => history.push(`/order/${order._id}`)}
+                            >
+                              View Details
+                            </button>
+                          </div>
                         </div>
                       </div>
                     ))}
@@ -268,6 +332,91 @@ const ProfileScreen = () => {
           )}
         </div>
       </div>
+
+      {/* Reminder Modal */}
+      {showReminderModal && (
+        <div className="reminder-modal-overlay" onClick={handleCloseReminderModal}>
+          <div className="reminder-modal" onClick={(e) => e.stopPropagation()}>
+            <div className="reminder-modal-header">
+              <h2>
+                <i className="fas fa-bell"></i> Set Medication Reminder
+              </h2>
+              <button className="modal-close-btn" onClick={handleCloseReminderModal}>
+                <i className="fas fa-times"></i>
+              </button>
+            </div>
+            <div className="reminder-modal-body">
+              {selectedOrder && (
+                <div className="reminder-order-info">
+                  <p className="reminder-order-label">Order Details:</p>
+                  <p className="reminder-order-id">#{selectedOrder._id.substring(0, 8)}</p>
+                  <div className="reminder-order-items">
+                    {selectedOrder.orderItems.map((item, idx) => (
+                      <span key={idx}>
+                        {item.name} ({item.qty}x)
+                        {idx < selectedOrder.orderItems.length - 1 ? ", " : ""}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              )}
+              <form onSubmit={handleSaveReminder} className="reminder-form">
+                <div className="form-group">
+                  <label htmlFor="reminderDate">
+                    <i className="fas fa-calendar"></i> Reminder Date
+                  </label>
+                  <input
+                    type="date"
+                    id="reminderDate"
+                    value={reminderDate}
+                    onChange={(e) => setReminderDate(e.target.value)}
+                    min={new Date().toISOString().split('T')[0]}
+                    required
+                  />
+                  <small className="form-hint">
+                    Select when you want to be reminded to reorder
+                  </small>
+                </div>
+                <div className="form-group">
+                  <label htmlFor="reminderTime">
+                    <i className="fas fa-clock"></i> Reminder Time
+                  </label>
+                  <input
+                    type="time"
+                    id="reminderTime"
+                    value={reminderTime}
+                    onChange={(e) => setReminderTime(e.target.value)}
+                    required
+                  />
+                  <small className="form-hint">
+                    What time should we remind you?
+                  </small>
+                </div>
+                <div className="form-group">
+                  <label htmlFor="reminderMessage">
+                    <i className="fas fa-comment"></i> Reminder Message
+                  </label>
+                  <textarea
+                    id="reminderMessage"
+                    value={reminderMessage}
+                    onChange={(e) => setReminderMessage(e.target.value)}
+                    rows="3"
+                    placeholder="Enter a custom reminder message..."
+                  />
+                </div>
+                <div className="reminder-modal-actions">
+                  <button type="button" className="cancel-btn" onClick={handleCloseReminderModal}>
+                    Cancel
+                  </button>
+                  <button type="submit" className="save-reminder-btn">
+                    <i className="fas fa-check"></i> Save Reminder
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
