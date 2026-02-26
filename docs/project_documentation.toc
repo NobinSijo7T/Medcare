@@ -1,0 +1,32 @@
+\contentsline {section}{\numberline {1}Project Overview}{3}{section.1}%
+\contentsline {subsection}{\numberline {1.1}Key Features}{3}{subsection.1.1}%
+\contentsline {subsection}{\numberline {1.2}Architecture}{3}{subsection.1.2}%
+\contentsline {section}{\numberline {2}System Diagrams}{4}{section.2}%
+\contentsline {subsection}{\numberline {2.1}Use Case Diagram}{4}{subsection.2.1}%
+\contentsline {subsection}{\numberline {2.2}Data Flow Diagram (DFD) - Level 0}{5}{subsection.2.2}%
+\contentsline {subsection}{\numberline {2.3}Data Flow Diagram (DFD) - Level 1}{5}{subsection.2.3}%
+\contentsline {subsection}{\numberline {2.4}Entity-Relationship (ER) Diagram}{6}{subsection.2.4}%
+\contentsline {subsection}{\numberline {2.5}Project Timeline - Gantt Chart}{7}{subsection.2.5}%
+\contentsline {subsection}{\numberline {2.6}System Architecture Block Diagram}{8}{subsection.2.6}%
+\contentsline {section}{\numberline {3}Languages and Technologies Used}{9}{section.3}%
+\contentsline {subsection}{\numberline {3.1}Programming Languages}{9}{subsection.3.1}%
+\contentsline {subsection}{\numberline {3.2}Backend Packages (Node.js)}{9}{subsection.3.2}%
+\contentsline {subsection}{\numberline {3.3}Frontend Packages (React.js)}{10}{subsection.3.3}%
+\contentsline {section}{\numberline {4}Database Schema}{11}{section.4}%
+\contentsline {subsection}{\numberline {4.1}User Collection}{11}{subsection.4.1}%
+\contentsline {subsection}{\numberline {4.2}Product Collection}{11}{subsection.4.2}%
+\contentsline {subsection}{\numberline {4.3}Order Collection}{11}{subsection.4.3}%
+\contentsline {subsection}{\numberline {4.4}Contact Collection}{11}{subsection.4.4}%
+\contentsline {section}{\numberline {5}Step-wise Algorithm}{12}{section.5}%
+\contentsline {subsection}{\numberline {5.1}User Registration Process}{12}{subsection.5.1}%
+\contentsline {subsection}{\numberline {5.2}User Login Process}{13}{subsection.5.2}%
+\contentsline {subsection}{\numberline {5.3}Product Browsing Process}{13}{subsection.5.3}%
+\contentsline {subsection}{\numberline {5.4}Add to Cart Process}{13}{subsection.5.4}%
+\contentsline {subsection}{\numberline {5.5}Checkout and Payment Process}{14}{subsection.5.5}%
+\contentsline {subsection}{\numberline {5.6}Order Management Process}{14}{subsection.5.6}%
+\contentsline {subsection}{\numberline {5.7}Contact Form Submission}{15}{subsection.5.7}%
+\contentsline {section}{\numberline {6}API Endpoints}{16}{section.6}%
+\contentsline {section}{\numberline {7}System Requirements}{17}{section.7}%
+\contentsline {subsection}{\numberline {7.1}Software Requirements}{17}{subsection.7.1}%
+\contentsline {subsection}{\numberline {7.2}Environment Variables}{17}{subsection.7.2}%
+\contentsline {section}{\numberline {8}Conclusion}{17}{section.8}%
