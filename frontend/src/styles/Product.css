@@ -175,6 +175,8 @@
   color: #171717;
   border-radius: 50%;
   font-size: 1.1rem;
+  position: relative;
+  z-index: 1;
 }
 
 .product-card__button--secondary:hover {
@@ -186,6 +188,21 @@
 
 .product-card__button--secondary:active {
   transform: translateY(0);
+}
+
+.product-card__button--secondary.added {
+  background: #4ade80;
+  color: #ffffff;
+  animation: addedPulse 0.4s ease;
+}
+
+@keyframes addedPulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.2);
+  }
 }
 
 /* ---- Responsive ---- */

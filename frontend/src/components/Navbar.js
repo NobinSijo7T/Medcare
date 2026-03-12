@@ -2,7 +2,6 @@ import "../styles/Navbar.css";
 import { Link, useHistory } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { logout } from "../redux/actions/userActions";
-import logo from "../images/logo.png";
 
 const Navbar = ({ click }) => {
   const cart = useSelector((state) => state.cart);
@@ -28,7 +27,7 @@ const Navbar = ({ click }) => {
     
       <Link to="/" className="">
         <span className="logo">
-          <img src={logo} style={{ height: "40px", width: "200px" }} alt="" />
+          <img src="/medcare_white.png" style={{ height: "40px", width: "200px" }} alt="Medcare Logo" />
         </span>
 
       </Link>

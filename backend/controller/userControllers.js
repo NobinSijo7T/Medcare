@@ -5,12 +5,23 @@ const generateToken = require("../utils/generateToken");
 // @route   POST /api/users/login
 // @access  Public
 const authUser = async (req, res) => {
-  const { email, password } = req.body;
+  const { email, password, loginType = "user" } = req.body;
 
   try {
     const user = await User.findOne({ email });
 
     if (user && (await user.matchPassword(password))) {
+      // Check if login type matches user role
+      if (loginType === "user" && user.isAdmin) {
+        res.status(403).json({ message: "Admin accounts cannot login as patients. Please use the Admin Portal." });
+        return;
+      }
+      
+      if (loginType === "admin" && !user.isAdmin) {
+        res.status(403).json({ message: "You do not have admin privileges. Please use Patient Login." });
+        return;
+      }
+
       res.json({
         _id: user._id,
         name: user.name,

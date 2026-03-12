@@ -65,6 +65,7 @@ const CartScreen = () => {
 
   // Checkout form state
   const [showCheckoutForm, setShowCheckoutForm] = useState(false);
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [address, setAddress] = useState("");
   const [city, setCity] = useState("");
   const [postalCode, setPostalCode] = useState("");
@@ -73,10 +74,19 @@ const CartScreen = () => {
 
   useEffect(() => {
     if (orderSuccess) {
+      // Show success animation
+      setShowCheckoutForm(false);
+      setShowSuccessModal(true);
+      
       // Clear cart after successful order
       cartItems.forEach(item => dispatch(removeFromCart(item.product)));
-      // Redirect to profile page to see orders
-      history.push("/profile");
+      
+      // Redirect to profile page after animation
+      setTimeout(() => {
+        // Reset order create state before redirecting
+        dispatch({ type: "ORDER_CREATE_RESET" });
+        history.push("/profile");
+      }, 3000);
     }
   }, [orderSuccess, history, cartItems, dispatch]);
 
@@ -139,6 +149,27 @@ const CartScreen = () => {
 
   return (
     <>
+      {/* Success Modal */}
+      {showSuccessModal && (
+        <div className="success-modal-overlay">
+          <div className="success-modal">
+            <div className="success-animation">
+              <div className="success-checkmark">
+                <svg className="checkmark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 52">
+                  <circle className="checkmark-circle" cx="26" cy="26" r="25" fill="none"/>
+                  <path className="checkmark-check" fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8"/>
+                </svg>
+              </div>
+            </div>
+            <h2 className="success-title">Order Placed Successfully!</h2>
+            <p className="success-message">Thank you for your order. You will be redirected to your profile shortly.</p>
+            <div className="success-loader">
+              <div className="success-loader-bar"></div>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Checkout Modal */}
       {showCheckoutForm && (
         <div className="checkout-modal-overlay" onClick={() => setShowCheckoutForm(false)}>

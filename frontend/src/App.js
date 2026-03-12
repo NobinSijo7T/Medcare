@@ -28,7 +28,7 @@ import ProfileScreen from "./screens/ProfileScreen";
 import PrescriptionScreen from "./screens/PrescriptionScreen";
 // import
 // import logo from "./images/logo.png";
-const logo = "/medcare.png";
+const logo = "/medcare_white.png";
 
 // Wrapper component to use hooks inside Router
 function AppContent() {

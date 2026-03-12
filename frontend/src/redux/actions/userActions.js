@@ -2,7 +2,7 @@ import * as actionTypes from "../constants/userConstants";
 import axios from "axios";
 
 // Login
-export const login = (email, password) => async (dispatch) => {
+export const login = (email, password, loginType = "user") => async (dispatch) => {
   try {
     dispatch({ type: actionTypes.USER_LOGIN_REQUEST });
 
@@ -14,7 +14,7 @@ export const login = (email, password) => async (dispatch) => {
 
     const { data } = await axios.post(
       "/api/users/login",
-      { email, password },
+      { email, password, loginType },
       config
     );
 

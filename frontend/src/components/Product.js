@@ -2,12 +2,24 @@ import "../styles/Product.css";
 import { Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { addToCart } from "../redux/actions/cartActions";
+import { useState } from "react";
 
 const Product = ({ imgsrc, title, unique_id, price, category, productId }) => {
   const dispatch = useDispatch();
+  const [isAdded, setIsAdded] = useState(false);
 
-  const handleAddToCart = () => {
+  const handleAddToCart = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    
+    console.log("Adding to cart:", productId);
     dispatch(addToCart(productId, 1));
+    
+    // Show visual feedback
+    setIsAdded(true);
+    setTimeout(() => {
+      setIsAdded(false);
+    }, 2000);
   };
 
   return (
@@ -34,8 +46,17 @@ const Product = ({ imgsrc, title, unique_id, price, category, productId }) => {
           <Link to={`/product/${productId}`} className="product-card__button product-card__button--primary">
             View Details
           </Link>
-          <button onClick={handleAddToCart} className="product-card__button product-card__button--secondary" aria-label="Add to Cart">
-            <i className="fas fa-shopping-cart"></i>
+          <button 
+            onClick={handleAddToCart} 
+            className={`product-card__button product-card__button--secondary ${isAdded ? 'added' : ''}`}
+            aria-label="Add to Cart"
+            type="button"
+          >
+            {isAdded ? (
+              <i className="fas fa-check"></i>
+            ) : (
+              <i className="fas fa-shopping-cart"></i>
+            )}
           </button>
         </div>
       </div>

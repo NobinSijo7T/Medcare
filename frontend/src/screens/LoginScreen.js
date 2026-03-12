@@ -22,24 +22,17 @@ const LoginScreen = () => {
   useEffect(() => {
     if (userInfo) {
       // Redirect admin to admin panel, regular users to home
-      if (userInfo.isAdmin && loginType === "admin") {
+      if (userInfo.isAdmin) {
         history.push("/admin");
-      } else if (!userInfo.isAdmin && loginType === "user") {
-        history.push(redirect);
-      } else if (userInfo.isAdmin && loginType === "user") {
-        // Admin trying to login as user
-        history.push(redirect);
       } else {
-        // Regular user trying to access admin - show error
-        // This will be handled by the backend
         history.push(redirect);
       }
     }
-  }, [history, userInfo, redirect, loginType]);
+  }, [history, userInfo, redirect]);
 
   const submitHandler = (e) => {
     e.preventDefault();
-    dispatch(login(email, password));
+    dispatch(login(email, password, loginType));
   };
 
   return (
