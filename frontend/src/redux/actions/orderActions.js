@@ -184,6 +184,9 @@ export const setOrderReminder = (orderId, reminderDate, reminderTime, reminderMe
       type: actionTypes.ORDER_REMINDER_SET_SUCCESS,
       payload: data,
     });
+
+    // Refresh active reminders immediately so notification appears without page refresh
+    dispatch(getActiveReminders());
   } catch (error) {
     dispatch({
       type: actionTypes.ORDER_REMINDER_SET_FAIL,

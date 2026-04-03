@@ -9,17 +9,6 @@
 \geometry{a4paper, margin=1in}
 
 \definecolor{codebg}{rgb}{0.95,0.95,0.95}
-
-% Define JavaScript language for listings
-\lstdefinelanguage{JavaScript}{
-  keywords={break, case, catch, continue, debugger, default, delete, do, else, finally, for, function, if, in, instanceof, new, return, switch, this, throw, try, typeof, var, void, while, with, const, let, await, async},
-  morecomment=[l]{//},
-  morecomment=[s]{/*}{*/},
-  morestring=[b]",
-  morestring=[b]',
-  sensitive=true
-}
-
 \lstset{
     backgroundcolor=\color{codebg},
     basicstyle=\ttfamily\small,
@@ -44,7 +33,7 @@
 \tableofcontents
 \newpage
 
-\section{What is a Database?}
+\section{What is a Database? 🗄️}
 
 Imagine you have a magical notebook that:
 \begin{itemize}
@@ -70,7 +59,7 @@ In MongoDB, these "boxes" are called \textbf{Collections}, and each item in a bo
 
 \section{What Information Do We Store?}
 
-\subsection{Users Collection - Customer Information Box}
+\subsection{Users Collection - Customer Information Box 👤}
 
 Every customer who signs up gets their information saved here:
 
@@ -96,7 +85,7 @@ Every customer who signs up gets their information saved here:
     \item \textbf{createdAt:} When they signed up
 \end{itemize}
 
-\subsection{Products Collection - Medicine Information Box}
+\subsection{Products Collection - Medicine Information Box 💊}
 
 Every medicine in our pharmacy is stored here:
 
@@ -118,7 +107,7 @@ Every medicine in our pharmacy is stored here:
 
 \textbf{Think of it like:} A detailed label on each medicine bottle!
 
-\subsection{Orders Collection - Shopping Receipt Box}
+\subsection{Orders Collection - Shopping Receipt Box 🛒}
 
 When someone buys medicine, we save the order here:
 
@@ -140,7 +129,7 @@ When someone buys medicine, we save the order here:
 
 \textbf{Think of it like:} A receipt you get after shopping!
 
-\subsection{Contact Collection - Message Box}
+\subsection{Contact Collection - Message Box 📧}
 
 When someone sends us a message through the contact form:
 
@@ -156,7 +145,7 @@ When someone sends us a message through the contact form:
 \end{tikzpicture}
 \end{center}
 
-\section{How Frontend Connects to Backend}
+\section{How Frontend Connects to Backend 🔗}
 
 \subsection{The Three-Part Team}
 
@@ -167,13 +156,13 @@ Our pharmacy application works like a team of three friends:
     % Define styles
     \tikzstyle{frontend} = [rectangle, rounded corners, minimum width=3cm, minimum height=1.5cm, text centered, draw=black, fill=frontend, text width=3cm]
     \tikzstyle{backend} = [rectangle, rounded corners, minimum width=3cm, minimum height=1.5cm, text centered, draw=black, fill=backend, text width=3cm]
-    \tikzstyle{database} = [cylinder, shape border rotate=90, aspect=0.25, minimum width=3cm, minimum height=2cm, draw=black, fill=database, text centered, text width=3cm]
+    \tikzstyle{database} = [cylinder, shape border rotate=90, aspect=0.25, minimum width=3cm, minimum height=2cm, draw=black, fill=database, text centered]
     \tikzstyle{arrow} = [thick,->,>=stealth]
     
     % Nodes
     \node (frontend) [frontend] {\textbf{Frontend} \\ (What you see)};
     \node (backend) [backend, right of=frontend, xshift=3cm] {\textbf{Backend} \\ (The brain)};
-    \node (db) [database, right of=backend, xshift=3cm] {\textbf{Database} (Storage)};
+    \node (db) [database, right of=backend, xshift=3cm] {\textbf{Database} \\ (Storage)};
     
     % Arrows
     \draw [arrow] (frontend) -- node[anchor=south] {Requests} (backend);
@@ -189,15 +178,14 @@ Let's follow what happens when someone wants to see all medicines:
 
 \begin{center}
 \begin{tikzpicture}[node distance=2.5cm, auto]
-    \tikzstyle{stepbox} = [rectangle, rounded corners, minimum width=6cm, minimum height=1cm, text centered, draw=black, fill=blue!20]
-    \tikzstyle{arrow} = [thick,->,>=stealth]
+    \tikzstyle{step} = [rectangle, rounded corners, minimum width=6cm, minimum height=1cm, text centered, draw=black, fill=blue!20]
     
-    \node (step1) [stepbox] {1. Customer clicks "View Products"};
-    \node (step2) [stepbox, below of=step1] {2. Frontend sends request to Backend};
-    \node (step3) [stepbox, below of=step2] {3. Backend asks Database for products};
-    \node (step4) [stepbox, below of=step3] {4. Database sends product list back};
-    \node (step5) [stepbox, below of=step4] {5. Backend sends data to Frontend};
-    \node (step6) [stepbox, below of=step5] {6. Frontend shows products on screen};
+    \node (step1) [step] {1. Customer clicks "View Products"};
+    \node (step2) [step, below of=step1] {2. Frontend sends request to Backend};
+    \node (step3) [step, below of=step2] {3. Backend asks Database for products};
+    \node (step4) [step, below of=step3] {4. Database sends product list back};
+    \node (step5) [step, below of=step4] {5. Backend sends data to Frontend};
+    \node (step6) [step, below of=step5] {6. Frontend shows products on screen};
     
     \draw [arrow] (step1) -- (step2);
     \draw [arrow] (step2) -- (step3);
@@ -268,7 +256,6 @@ const { data } = await axios.post(
 \begin{center}
 \begin{tikzpicture}[node distance=1.8cm, every node/.style={font=\small}]
     \tikzstyle{box} = [rectangle, rounded corners, minimum width=7cm, minimum height=0.8cm, text centered, draw=black]
-    \tikzstyle{arrow} = [thick,->,>=stealth]
     
     \node (a) [box, fill=frontend] {1. SignUpScreen.js - Customer fills registration form};
     \node (b) [box, below of=a, fill=frontend] {2. userActions.js - Sends data to /api/users};
@@ -294,7 +281,6 @@ const { data } = await axios.post(
 \begin{center}
 \begin{tikzpicture}[node distance=1.8cm, every node/.style={font=\small}]
     \tikzstyle{box} = [rectangle, rounded corners, minimum width=7cm, minimum height=0.8cm, text centered, draw=black]
-    \tikzstyle{arrow} = [thick,->,>=stealth]
     
     \node (a) [box, fill=frontend] {1. AllProductsScreen.js - Page loads};
     \node (b) [box, below of=a, fill=frontend] {2. productActions.js - Requests all products};
@@ -454,7 +440,7 @@ Let's follow what happens when Emma wants to buy Paracetamol:
     \end{itemize}
 \end{enumerate}
 
-\section{Security Features}
+\section{Security Features 🔒}
 
 \subsection{Password Protection}
 
@@ -484,7 +470,6 @@ After login:
 
 \begin{center}
 \begin{tikzpicture}[node distance=3cm]
-    \tikzstyle{arrow} = [thick,->,>=stealth]
     \node[draw, circle, fill=frontend, minimum size=3cm, align=center] (fe) {\textbf{Frontend} \\ User Interface \\ React App};
     \node[draw, circle, fill=backend, minimum size=3cm, align=center, right of=fe, xshift=3cm] (be) {\textbf{Backend} \\ Business Logic \\ Express Server};
     \node[draw, circle, fill=database, minimum size=3cm, align=center, below of=fe, yshift=-1cm, xshift=3cm] (db) {\textbf{Database} \\ Data Storage \\ MongoDB};

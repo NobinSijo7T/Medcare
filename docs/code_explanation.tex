@@ -4,77 +4,18 @@
 \usepackage{xcolor}
 \usepackage{listings}
 \usepackage{geometry}
-\usepackage{tcolorbox}
-\usepackage{tikz}
 \geometry{a4paper, margin=1in}
 
-% Define vibrant colors
 \definecolor{codebg}{rgb}{0.95,0.95,0.95}
-\definecolor{frontendcolor}{RGB}{255,182,193}
-\definecolor{backendcolor}{RGB}{173,216,230}
-\definecolor{databasecolor}{RGB}{144,238,144}
-\definecolor{importantcolor}{RGB}{255,215,0}
-\definecolor{tipcolor}{RGB}{255,228,181}
-\definecolor{sectioncolor}{RGB}{70,130,180}
-\definecolor{subsectioncolor}{RGB}{100,149,237}
-
-% Define JavaScript language for listings
-\lstdefinelanguage{JavaScript}{
-  keywords={break, case, catch, continue, debugger, default, delete, do, else, finally, for, function, if, in, instanceof, new, return, switch, this, throw, try, typeof, var, void, while, with, const, let, await, async},
-  morecomment=[l]{//},
-  morecomment=[s]{/*}{*/},
-  morestring=[b]",
-  morestring=[b]',
-  sensitive=true
-}
-
 \lstset{
     backgroundcolor=\color{codebg},
     basicstyle=\ttfamily\small,
     breaklines=true,
-    frame=single,
-    rulecolor=\color{sectioncolor},
-    commentstyle=\color{green!60!black},
-    keywordstyle=\color{blue!80!black}\bfseries,
-    stringstyle=\color{red!70!black}
+    frame=single
 }
 
-% Define custom boxes
-\newtcolorbox{frontendbox}{
-    colback=frontendcolor!20,
-    colframe=frontendcolor!80!black,
-    title={\textbf{Frontend Component}},
-    fonttitle=\bfseries,
-    rounded corners
-}
-
-\newtcolorbox{backendbox}{
-    colback=backendcolor!20,
-    colframe=backendcolor!80!black,
-    title={\textbf{Backend Component}},
-    fonttitle=\bfseries,
-    rounded corners
-}
-
-\newtcolorbox{tipbox}{
-    colback=tipcolor!30,
-    colframe=orange!80!black,
-    title={\textbf{Simple Explanation}},
-    fonttitle=\bfseries,
-    rounded corners
-}
-
-\newtcolorbox{importantbox}{
-    colback=importantcolor!20,
-    colframe=importantcolor!80!black,
-    title={\textbf{Important}},
-    fonttitle=\bfseries,
-    rounded corners
-}
-
-\title{{\Huge\textbf{\color{sectioncolor}Pharmacy Management Application}} \\ 
-{\Large\color{subsectioncolor}Code Explanation for Beginners}}
-\author{{\large\textbf{A Simple Guide for Kids and Beginners}}}
+\title{\textbf{Pharmacy Management Application} \\ Code Explanation for Beginners}
+\author{A Simple Guide for Kids and Beginners}
 \date{\today}
 
 \begin{document}
@@ -85,7 +26,7 @@
 \tableofcontents
 \newpage
 
-\section{\color{sectioncolor}Introduction - What is This Project?}
+\section{Introduction - What is This Project?}
 
 Imagine you want to buy medicine online, just like ordering toys or games! This project is like a digital pharmacy store where people can:
 \begin{itemize}
@@ -97,25 +38,21 @@ Imagine you want to buy medicine online, just like ordering toys or games! This 
 
 It's like having a medicine shop on your computer or phone!
 
-\section{\color{sectioncolor}Understanding the Main Parts}
+\section{Understanding the Main Parts}
 
 Our pharmacy application has two main parts, like two friends working together:
 
-\subsection{\color{frontendcolor!80!black}The Frontend (What You See)}
-\begin{frontendbox}
+\subsection{The Frontend (What You See) 👀}
 This is like the colorful shop window! It's what people see and click on. All the buttons, pictures, and pages are here.
 
 \textbf{Location:} \texttt{frontend/} folder
-\end{frontendbox}
 
-\subsection{\color{backendcolor!80!black}The Backend (The Brain)}
-\begin{backendbox}
+\subsection{The Backend (The Brain) 🧠}
 This is like the shop's storage room and manager! It keeps all the information safe and makes sure everything works correctly.
 
 \textbf{Location:} \texttt{backend/} folder
-\end{backendbox}
 
-\section{\color{sectioncolor}Important Files Explained Simply}
+\section{Important Files Explained Simply}
 
 \subsection{server.js - The Boss of the Shop}
 
@@ -165,15 +102,13 @@ This is like the main display window of our shop! It decides what page to show w
 \textbf{Simple explanation:}
 When you click "Home", this file says "Show the Home Page!" When you click "Cart", it says "Show the Cart Page!" It's like a helpful guide in the shop.
 
-\section{\color{sectioncolor}Backend Files - The Storage Room}
+\section{Backend Files - The Storage Room}
 
-\subsection{\color{backendcolor!80!black}Models Folder - The Information Templates}
+\subsection{Models Folder - The Information Templates}
 
-\begin{backendbox}
 \textbf{Where it lives:} \texttt{backend/models/}
 
 Think of models as templates or forms - like when you fill out a form at school!
-\end{backendbox}
 
 \subsubsection{User.js - The Customer Information Form}
 
@@ -185,9 +120,7 @@ This file describes what information we save about each customer:
     \item \textbf{isAdmin:} Are you a shop manager? (Yes or No)
 \end{itemize}
 
-\begin{importantbox}
 \textbf{Special magic trick:} Before saving the password, it scrambles it so nobody can read it! This is called "encryption" - like writing in secret code.
-\end{importantbox}
 
 \begin{lstlisting}[language=JavaScript]
 // This is the template for a user
@@ -214,13 +147,11 @@ This file describes each medicine in our shop:
     \item \textbf{countInStock:} How many we have in the shop
 \end{itemize}
 
-\subsection{\color{backendcolor!80!black}Routes Folder - The Direction Signs}
+\subsection{Routes Folder - The Direction Signs}
 
-\begin{backendbox}
 \textbf{Where it lives:} \texttt{backend/routes/}
 
 Routes are like signs in a big building that say "Bathroom this way →" or "Exit that way ←"
-\end{backendbox}
 
 \subsubsection{userRoutes.js - The Customer Service Desk}
 
@@ -232,9 +163,7 @@ This file handles all requests about users:
     \item \texttt{PUT /api/users/profile} - Let customer update their profile
 \end{itemize}
 
-\begin{tipbox}
 Think of it like different windows at a bank - one for new accounts, one for checking your balance, etc.
-\end{tipbox}
 
 \subsubsection{productRoutes.js - The Medicine Information Desk}
 
@@ -247,13 +176,11 @@ This handles requests about products:
     \item Delete a medicine
 \end{itemize}
 
-\subsection{\color{backendcolor!80!black}Controllers Folder - The Workers}
+\subsection{Controllers Folder - The Workers}
 
-\begin{backendbox}
 \textbf{Where it lives:} \texttt{backend/controller/}
 
 Controllers are like the actual workers who do the job! When someone asks for something, the controller makes it happen.
-\end{backendbox}
 
 \subsubsection{userControllers.js - The Customer Service Worker}
 
@@ -278,15 +205,13 @@ Middleware is like a security guard at the entrance! Before letting you do certa
 
 If you pass the checks, you can continue. If not, the guard says "Sorry, you can't enter!"
 
-\section{\color{sectioncolor}Frontend Files - The Shop Display}
+\section{Frontend Files - The Shop Display}
 
-\subsection{\color{frontendcolor!80!black}Screens Folder - Different Shop Pages}
+\subsection{Screens Folder - Different Shop Pages}
 
-\begin{frontendbox}
 \textbf{Where it lives:} \texttt{frontend/src/screens/}
 
 Each file here is like a different room in our shop:
-\end{frontendbox}
 
 \subsubsection{HomeScreen.js - The Welcome Room}
 This is the first page people see - like the entrance of a store! It shows:
@@ -364,7 +289,7 @@ A small card that shows one item in your cart.
 \subsubsection{Footer.js - The Bottom Information}
 The footer at the bottom of every page with contact info and links.
 
-\section{\color{sectioncolor}Configuration Files}
+\section{Configuration Files}
 
 \subsection{db.js - The Database Connection}
 
@@ -399,11 +324,9 @@ For example:
     \item We need "mongoose" - to talk to the database
 \end{itemize}
 
-\section{\color{sectioncolor}How It All Works Together}
+\section{How It All Works Together}
 
-\begin{tipbox}
 Let's say someone wants to buy medicine. Here's the journey:
-\end{tipbox}
 
 \begin{enumerate}
     \item \textbf{Customer visits website:} They type the website address and App.js shows them the HomePage
@@ -412,7 +335,7 @@ Let's say someone wants to buy medicine. Here's the journey:
     
     \item \textbf{Getting data:} The frontend asks the backend "Give me all products!" by making a request to \texttt{/api/products}
     
-    \item \textbf{Backend responds:} The server.js receives the request, routes it to productRoutes.js, which calls productControllers.js to query the database for products
+    \item \textbf{Backend responds:} The server.js receives the request, routes it to productRoutes.js, which calls productControllers.js, which asks the database for all products
     
     \item \textbf{Sending back data:} The database gives the products to the controller, which sends them back to the frontend
     
@@ -427,14 +350,13 @@ Let's say someone wants to buy medicine. Here's the journey:
 
 It's like a relay race where each part passes the baton to the next!
 
-\section{\color{sectioncolor}Summary - The Big Picture}
+\section{Summary - The Big Picture}
 
-\begin{importantbox}
 \textbf{Think of it like a real pharmacy:}
 \begin{itemize}
-    \item \textbf{\color{frontendcolor!80!black}Frontend = Shop Display:} The colorful store people walk into
-    \item \textbf{\color{backendcolor!80!black}Backend = Storage Room \& Manager:} Where products are kept and managed
-    \item \textbf{\color{databasecolor!80!black}Database = Big Filing Cabinet:} Where all information is stored safely
+    \item \textbf{Frontend = Shop Display:} The colorful store people walk into
+    \item \textbf{Backend = Storage Room \& Manager:} Where products are kept and managed
+    \item \textbf{Database = Big Filing Cabinet:} Where all information is stored safely
     \item \textbf{Routes = Direction Signs:} Telling where to go for different things
     \item \textbf{Controllers = Workers:} Actually doing the tasks
     \item \textbf{Models = Forms \& Templates:} Standard formats for information
@@ -444,6 +366,5 @@ It's like a relay race where each part passes the baton to the next!
 \end{itemize}
 
 \textbf{Remember:} Just like a real shop needs many people and systems working together, our pharmacy application has many files and folders working as a team!
-\end{importantbox}
 
 \end{document}

@@ -20,6 +20,14 @@ const ProfileScreen = () => {
   const [reminderTime, setReminderTime] = useState("09:00");
   const [reminderMessage, setReminderMessage] = useState("Time to reorder your medication");
 
+  const formatDateForInput = (dateValue) => {
+    const date = new Date(dateValue);
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const day = String(date.getDate()).padStart(2, "0");
+    return `${year}-${month}-${day}`;
+  };
+
   const dispatch = useDispatch();
   const history = useHistory();
 
@@ -85,13 +93,13 @@ const ProfileScreen = () => {
     // Set default reminder date if one exists, otherwise suggest 7 days from now
     if (order.reminder && order.reminder.isSet) {
       const existingDate = new Date(order.reminder.reminderDate);
-      setReminderDate(existingDate.toISOString().split('T')[0]);
+      setReminderDate(formatDateForInput(existingDate));
       setReminderTime(order.reminder.reminderTime || "09:00");
       setReminderMessage(order.reminder.reminderMessage || "Time to reorder your medication");
     } else {
       const defaultDate = new Date();
       defaultDate.setDate(defaultDate.getDate() + 7);
-      setReminderDate(defaultDate.toISOString().split('T')[0]);
+      setReminderDate(formatDateForInput(defaultDate));
       setReminderTime("09:00");
       setReminderMessage("Time to reorder your medication");
     }
@@ -370,7 +378,7 @@ const ProfileScreen = () => {
                     id="reminderDate"
                     value={reminderDate}
                     onChange={(e) => setReminderDate(e.target.value)}
-                    min={new Date().toISOString().split('T')[0]}
+                    min={formatDateForInput(new Date())}
                     required
                   />
                   <small className="form-hint">

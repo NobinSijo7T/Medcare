@@ -9,6 +9,7 @@ import SideDrawer from "./components/SideDrawer";
 import Backdrop from "./components/Backdrop";
 import Footer from "./components/Footer";
 import UserProfileButton from "./components/UserProfileButton";
+import ReminderNotification from "./components/ReminderNotification";
 
 // Screens
 import HomeScreen from "./screens/HomeScreen";
@@ -61,6 +62,7 @@ function AppContent() {
   return (
     <>
       <UserProfileButton />
+      <ReminderNotification />
       <PillNav
         logo={logo}
         logoAlt="Pharmacy Logo"

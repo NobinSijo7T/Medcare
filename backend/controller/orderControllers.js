@@ -174,29 +174,26 @@ const setOrderReminder = async (req, res) => {
 const getActiveReminders = async (req, res) => {
   try {
     const now = new Date();
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
-    
-    const tomorrow = new Date(today);
-    tomorrow.setDate(tomorrow.getDate() + 1);
 
-    // Get all potential reminders for today
+    // Get reminders that are set and not yet shown for this user
     const orders = await Order.find({
       user: req.user._id,
       "reminder.isSet": true,
-      "reminder.reminderDate": { $gte: today, $lt: tomorrow },
       "reminder.notificationShown": false,
     }).sort({ "reminder.reminderDate": 1 });
 
-    // Filter by time - only show if current time >= reminder time
+    // Filter to show reminders whose scheduled date+time is due
     const activeOrders = orders.filter(order => {
-      if (!order.reminder.reminderTime) return true; // Show if no time set
-      
-      const [hours, minutes] = order.reminder.reminderTime.split(':').map(Number);
+      if (!order.reminder || !order.reminder.reminderDate) return false;
+
+      const time = order.reminder.reminderTime || "09:00";
+      const [hours, minutes] = time.split(":").map((value) => Number(value));
+
+      if (Number.isNaN(hours) || Number.isNaN(minutes)) return false;
+
       const reminderDateTime = new Date(order.reminder.reminderDate);
       reminderDateTime.setHours(hours, minutes, 0, 0);
-      
-      // Show reminder if current time has passed the reminder time
+
       return now >= reminderDateTime;
     });
 
